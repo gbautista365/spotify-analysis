@@ -1,0 +1,12 @@
+---
+title: "spotify-code"
+author: "German Bautista, Eric Bayer, Quentin Wetzel"
+date: "11/2/2021"
+output: pdf_document
+---
+
+```{r}
+spotify_data = readr::read_csv("spotify-data.csv")
+summary(spotify_data)
+```
+
