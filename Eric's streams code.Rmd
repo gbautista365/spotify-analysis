@@ -1,0 +1,55 @@
+---
+title: "Eric's Weird Code"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+millions_of_streams = c(2603,1489,1273,2137,1878,1874,1585,1562,2955,1306,2136,1911,1865,1766,1604,1585,1571,1566,1422,1285,2289,1721,1695,1536,1524,1451,1355,1354,2076,1871,1685,1662,1664,1640,1599,1572,1566,1543,1411,1384,1357,1979,1832,1681,1636,1513,1467,1458,1430,1414,1399,1281,1238,1254,2391,1670,1495,1425,1367,1372,1362,1302,1283,1268,1270,1280,1263,1243,1250,1234,1592,1524,1480,1310,1294,1274,1224,1215,1489,1236,1285,1239,1260,1244,1232,1223,1350,1351,1471,1469,1291,1543,1489,1231,1391,2157,1248,1229,1456)
+
+days = c(43798,43785,44036,43412,42797,42767,43209,43707,42741,43728,42580,43553,42622,43224,41498,43483,42972,42615,41442,42993,42993,41810,43160,43315,42122,43726,43805,42151,43391,41810,42634,42317,42788,43370,42852,42818,41530,43329,43407,41358,40771,43637,43119,43770,27698,42824,42587,42678,41743,42524,41953,42874,43389,38145,43595,42950,43217,43595,42832,42986,41415,42692,42073,43196,42537,41156,43202,43560,39490,42846,42888,42299,42405,42171,43196,42713,42398,42163,42842,43154,42108,42244,35002,41156,43293,41778,42398,43250,42341,40963,42496,42065,42842,37455,43377,42465,41880,42573,42108)
+
+current_date = 44503
+
+days_on_spotify = current_date - days
+
+adjusted_days_on_spotify = ifelse(days_on_spotify>4689,4689,days_on_spotify)
+
+#Option 1: adjusted so everyday is equally weighted since spotify's release
+millions_of_streams_per_day = millions_of_streams / adjusted_days_on_spotify
+
+billions_revenue_since_2009 = c(.01336,.0739,.1878,.4301,.746,1.08,1.94,2.95,4.09,5.26,6.76,7.88,9.46)
+
+percentage_adjusted_revenues = billions_revenue_since_2009/billions_revenue_since_2009[13]
+
+days_since_start_of_year = c(4689,4325,3960,3595,3229,2864,2499,2134,1768,1403,1038,673,307)
+
+#Option 2: adjusted so more recent years will get more weight based on total revenue of spotify (early years like 2009 will get less weight since there were significantly less spotify users)
+percentage_adjusted_days_on_spotify = ifelse(adjusted_days_on_spotify<days_since_start_of_year[13],adjusted_days_on_spotify*percentage_adjusted_revenues[13],
+       ifelse(adjusted_days_on_spotify<days_since_start_of_year[12],(adjusted_days_on_spotify-days_since_start_of_year[13])*percentage_adjusted_revenues[12]+307*percentage_adjusted_revenues[13],
+       ifelse(adjusted_days_on_spotify<days_since_start_of_year[11],(adjusted_days_on_spotify-days_since_start_of_year[12])*percentage_adjusted_revenues[11]+365.25*percentage_adjusted_revenues[12]+307*percentage_adjusted_revenues[13],
+       ifelse(adjusted_days_on_spotify<days_since_start_of_year[10],(adjusted_days_on_spotify-days_since_start_of_year[11])*percentage_adjusted_revenues[10]+365.25*percentage_adjusted_revenues[11]+365.25*percentage_adjusted_revenues[12]+307*percentage_adjusted_revenues[13],
+       ifelse(adjusted_days_on_spotify<days_since_start_of_year[9],(adjusted_days_on_spotify-days_since_start_of_year[10])*percentage_adjusted_revenues[9]+365.25*percentage_adjusted_revenues[10]+365.25*percentage_adjusted_revenues[11]+365.25*percentage_adjusted_revenues[12]+307*percentage_adjusted_revenues[13],
+       ifelse(adjusted_days_on_spotify<days_since_start_of_year[8],(adjusted_days_on_spotify-days_since_start_of_year[9])*percentage_adjusted_revenues[8]+365.25*percentage_adjusted_revenues[9]+365.25*percentage_adjusted_revenues[10]+365.25*percentage_adjusted_revenues[11]+365.25*percentage_adjusted_revenues[12]+307*percentage_adjusted_revenues[13],
+       ifelse(adjusted_days_on_spotify<days_since_start_of_year[7],(adjusted_days_on_spotify-days_since_start_of_year[8])*percentage_adjusted_revenues[7]+365.25*percentage_adjusted_revenues[8]+365.25*percentage_adjusted_revenues[9]+365.25*percentage_adjusted_revenues[10]+365.25*percentage_adjusted_revenues[11]+365.25*percentage_adjusted_revenues[12]+307*percentage_adjusted_revenues[13],
+       ifelse(adjusted_days_on_spotify<days_since_start_of_year[6],(adjusted_days_on_spotify-days_since_start_of_year[7])*percentage_adjusted_revenues[6]+365.25*percentage_adjusted_revenues[7]+365.25*percentage_adjusted_revenues[8]+365.25*percentage_adjusted_revenues[9]+365.25*percentage_adjusted_revenues[10]+365.25*percentage_adjusted_revenues[11]+365.25*percentage_adjusted_revenues[12]+307*percentage_adjusted_revenues[13],
+       ifelse(adjusted_days_on_spotify<days_since_start_of_year[5],(adjusted_days_on_spotify-days_since_start_of_year[6])*percentage_adjusted_revenues[5]+365.25*percentage_adjusted_revenues[6]+365.25*percentage_adjusted_revenues[7]+365.25*percentage_adjusted_revenues[8]+365.25*percentage_adjusted_revenues[9]+365.25*percentage_adjusted_revenues[10]+365.25*percentage_adjusted_revenues[11]+365.25*percentage_adjusted_revenues[12]+307*percentage_adjusted_revenues[13],
+       ifelse(adjusted_days_on_spotify<days_since_start_of_year[4],(adjusted_days_on_spotify-days_since_start_of_year[5])*percentage_adjusted_revenues[4]+365.25*percentage_adjusted_revenues[5]+365.25*percentage_adjusted_revenues[6]+365.25*percentage_adjusted_revenues[7]+365.25*percentage_adjusted_revenues[8]+365.25*percentage_adjusted_revenues[9]+365.25*percentage_adjusted_revenues[10]+365.25*percentage_adjusted_revenues[11]+365.25*percentage_adjusted_revenues[12]+307*percentage_adjusted_revenues[13],
+       ifelse(adjusted_days_on_spotify<days_since_start_of_year[3],(adjusted_days_on_spotify-days_since_start_of_year[4])*percentage_adjusted_revenues[3]+365.25*percentage_adjusted_revenues[4]+365.25*percentage_adjusted_revenues[5]+365.25*percentage_adjusted_revenues[6]+365.25*percentage_adjusted_revenues[7]+365.25*percentage_adjusted_revenues[8]+365.25*percentage_adjusted_revenues[9]+365.25*percentage_adjusted_revenues[10]+365.25*percentage_adjusted_revenues[11]+365.25*percentage_adjusted_revenues[12]+307*percentage_adjusted_revenues[13],
+       ifelse(adjusted_days_on_spotify<days_since_start_of_year[2],(adjusted_days_on_spotify-days_since_start_of_year[3])*percentage_adjusted_revenues[2]+365.25*percentage_adjusted_revenues[3]+365.25*percentage_adjusted_revenues[4]+365.25*percentage_adjusted_revenues[5]+365.25*percentage_adjusted_revenues[6]+365.25*percentage_adjusted_revenues[7]+365.25*percentage_adjusted_revenues[8]+365.25*percentage_adjusted_revenues[9]+365.25*percentage_adjusted_revenues[10]+365.25*percentage_adjusted_revenues[11]+365.25*percentage_adjusted_revenues[12]+307*percentage_adjusted_revenues[13],
+       ifelse(adjusted_days_on_spotify<days_since_start_of_year[1],(adjusted_days_on_spotify-days_since_start_of_year[2])*percentage_adjusted_revenues[1]+365.25*percentage_adjusted_revenues[2]+365.25*percentage_adjusted_revenues[3]+365.25*percentage_adjusted_revenues[4]+365.25*percentage_adjusted_revenues[5]+365.25*percentage_adjusted_revenues[6]+365.25*percentage_adjusted_revenues[7]+365.25*percentage_adjusted_revenues[8]+365.25*percentage_adjusted_revenues[9]+365.25*percentage_adjusted_revenues[10]+365.25*percentage_adjusted_revenues[11]+365.25*percentage_adjusted_revenues[12]+307*percentage_adjusted_revenues[13],
+                                                                   (adjusted_days_on_spotify-days_since_start_of_year[2])*percentage_adjusted_revenues[1]+365.25*percentage_adjusted_revenues[2]+365.25*percentage_adjusted_revenues[3]+365.25*percentage_adjusted_revenues[4]+365.25*percentage_adjusted_revenues[5]+365.25*percentage_adjusted_revenues[6]+365.25*percentage_adjusted_revenues[7]+365.25*percentage_adjusted_revenues[8]+365.25*percentage_adjusted_revenues[9]+365.25*percentage_adjusted_revenues[10]+365.25*percentage_adjusted_revenues[11]+365.25*percentage_adjusted_revenues[12]+307*percentage_adjusted_revenues[13])))))))))))))
+       
+
+millions_streams_per_percentage_adjusted_day = millions_of_streams/percentage_adjusted_days_on_spotify
+
+
+
+
+
+
+
+```
