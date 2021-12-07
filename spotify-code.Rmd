@@ -1,60 +1,56 @@
 ---
-title: "spotify-code"
+title: "STAT 431 Project Report"
 author: "German Bautista, Eric Bayer, Quentin Wetzel"
-date: "11/03/2021"
-output: pdf_document
+date: "12/07/2021"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
 ---
-
-```{r}
-# Read data
-spotify_data = readr::read_csv("spotify-data.csv")
-
-# Clean data
-names(spotify_data)[names(spotify_data) == "beats.per.minute"] = "bpm"
-
-# INSERT annual stream rate column
-# INSERT total number of streams
-# INSERT years since release
-
-# anyNA(spotify_data) FALSE
-head(spotify_data, 10)
-
-# MAKE a dataframe of pooled data by groups (genre)
-# We need to decide how to make a pooled estimate. The most obvious is to take a weighted average
-```
-
-
-PLAN:
 
 - Follow IMRaD structure: (Introduction, Methods, Results, Analysis, Discussion, Appendix)
 - Clean and adjust data set
 -
--
+- Try different priors: an uninformative prior and another appropriate prior. Check how the posterior distributions differ (Brief sensitivity analysis)
 
-```{r}
-#summary(spotify_data)
-```
+# Spotify Analysis
 
-
-Try different priors: an uninformative prior and another appropriate prior. Check how the posterior distributions differ (Brief sensitivity analysis)
-
-
-```{r}
-# Markov Chain Monte Carlo (MCMC)
+## Introduction
 
 
 
 
-```
 
-- Introduction
+## Methods
 
-- Methods
 
-- Results
 
-- Analysis
 
-- Discussion
 
-- Appendix
+## Results
+
+
+
+
+
+
+
+
+
+## Analysis
+
+
+
+
+
+## Discussion
+
+
+
+
+## Appendix
+
+
+
+
+

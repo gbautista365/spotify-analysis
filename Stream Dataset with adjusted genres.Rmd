@@ -1,5 +1,6 @@
 ---
 title: "Genre Dataset"
+date: "12/07/2021"
 output: html_document
 ---
 
@@ -7,7 +8,7 @@ output: html_document
 #Bring in data from kaggle
 spotify_data_100 = read.csv("Top 100 most Streamed - Sheet1.csv")
 #got rid of low outlier in stream data
-spotify_data = spotify_data_100[-98,]
+spotify_data = spotify_data_100[-98, ]
 ```
 
 ```{r}
@@ -16,7 +17,7 @@ millions_of_streams = c(2603,1489,1273,2137,1878,1874,1585,1562,2955,1306,2136,1
 
 spotify_data$streams = millions_of_streams
 
-#change the genre to the 7 main genres (1="Pop", 2="Rock", 3="Dance", 4="Rap", 5="R&B", 6="Hip Hop", 7="Electronic")
+#change the genre to the 7 main genres (1 ="Pop", 2 ="Rock", 3 ="Dance", 4 ="Rap", 5 ="R&B", 6="Hip Hop", 7="Electronic")
 
 genres = c("R&B","Pop","Rap","Pop","Pop","Rock","Electronic","Rap","Pop","Pop","Dance","Electronic","Pop","Rap","Hip Hop","Dance","Rap","Rap","Dance","Hip Hop","Rap","Pop","Rap","Rap","Rock","Rap","Rap","R&B","Rap","Pop","R&B","Pop","Dance","Dance","Rock","Rap","Rock","Dance","Pop","Pop","Rap","Pop","Hip Hop","Dance","Rock","Hip Hop","Dance","Rap","Dance","Pop","Dance","Dance","Electronic","Rock","Pop","Dance","Rap","Pop","Rap","Dance","Pop","Dance","Dance","Dance","Rock","Rock","Pop","Hip Hop","Pop","Dance","Dance","Pop","Dance","Pop","Dance","Rap","Dance","R&B","Dance","Rap","Pop","Pop","Rock","Rock","Electronic","Dance","Dance","Pop","Electronic","Pop","Dance","Dance","Dance","Hip Hop","Dance","Hip Hop","Pop","Dance","Dance")
 
@@ -30,7 +31,7 @@ current_date = 44503
 
 days_on_spotify = current_date - days
 
-adjusted_days_on_spotify = ifelse(days_on_spotify>4689,4689,days_on_spotify)
+adjusted_days_on_spotify = ifelse(days_on_spotify > 4689, 4689, days_on_spotify)
 
 spotify_data$days = adjusted_days_on_spotify
 ```
