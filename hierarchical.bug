@@ -1,0 +1,11 @@
+data {
+  dim.Y = dim(Y)
+}
+model {
+  theta ~ dgamma(a,b)
+  
+  for(i in 1:length) {
+    lambda[i] ~ dexp(theta)
+    y[i] ~ dpois(n[i] * lambda[i])
+  }
+}

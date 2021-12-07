@@ -1,0 +1,10 @@
+data {
+  
+}
+model {
+  theta ~ dgamma(a,b)
+  for(i in 1:length(y)) {
+    lambda[i] ~ exp(theta)
+    y[i] ~ dpois(n[i] * lambda[i])
+  }
+}
