@@ -35,3 +35,18 @@ adjusted_days_on_spotify = ifelse(days_on_spotify > 4689, 4689, days_on_spotify)
 
 spotify_data$days = adjusted_days_on_spotify
 ```
+
+```{r}
+spotify_data_reduced = spotify_data[,-c(1:2,4:14)]
+spotify_data_reduced$streams = spotify_data_reduced$streams*1000
+```
+
+```{r}
+library(dplyr)
+grouped_spotify = spotify_data_reduced %>% group_by(top.genre) %>% summarise(streams = sum(streams), days = sum(days))
+```
+
+```{r}
+write.table(grouped_spotify, file = "grouped_spotify_data.txt", sep = " ")
+write.table(spotify_data_reduced, file = "ungrouped_spotify_data.txt", sep = " ")
+```
