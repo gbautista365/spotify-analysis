@@ -4,14 +4,10 @@ data {
 }
 model {
   for(i in 1:genres) {
-    
-    for(j in ind[i]:(ind[i+1]-1)){
+    for(j in ind[i]:(ind[i + 1] - 1)) {
       Y[j] ~ dpois(lambda[j])
       lambda[j] ~ dexp(theta[i])
     }
     theta[i] ~ dgamma(a,b)
   }
-  
-  a ~ dexp(.001)
-  b ~ dexp(.001)
 }

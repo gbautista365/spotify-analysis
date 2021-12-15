@@ -1,0 +1,33 @@
+---
+title: "spotify-jags"
+author: "German Bautista"
+date: "12/14/2021"
+output: html_document
+---
+
+```{r}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+```{r}
+# Load libraries
+library(rjags)
+```
+
+```{r}
+spotify.data = read.table("ungrouped_spotify_data.txt")
+
+spotify.data$streams_day = spotify.data$stream/spotify.data$days
+
+spotify.data = spotify.data[order(spotify.data$top.genre), ]
+
+c(match(unique(spotify.data$top.genre), spotify.data$top.genre), length(spotify.data[, 1]) + 1)
+
+
+
+
+# Had this is bugs file??
+#a ~ dexp(.001)
+#  b ~ dexp(.001)
+```
+

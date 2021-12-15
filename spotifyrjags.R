@@ -11,14 +11,14 @@ data = read.table("ungrouped_spotify_data.txt")
 # We can change it back pretty easily
 data$streams_day = data$stream/data$days
 
-#This orders by genre so the newest bugs model makes since
+#This orders by genre so the newest bugs model makes sense
 data = data[order(data$top.genre),]
 
 #This resets the row numbers so again the newest bugs model works
 rownames(data) = NULL
 
 #This is just here since to show why I put the values I did in the bugs model variable ind
-indicator = c(match(unique(data$top.genre), data$top.genre),length(data[,1])+1)
+indicator = c(match(unique(data$top.genre), data$top.genre), length(data[,1])+1)
 
 #The bug model is weird, but essentially I coded it so each genre has its own loop over it's songs. 
 #Please check that it makes sense
