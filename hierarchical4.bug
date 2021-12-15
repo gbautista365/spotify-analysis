@@ -10,4 +10,6 @@ model {
     }
     theta[i] ~ dgamma(a,b)
   }
+  a ~ dexp(0.001)
+  b ~ dexp(0.001)
 }
