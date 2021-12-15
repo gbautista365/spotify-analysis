@@ -2,10 +2,12 @@
 title: "STAT 431 Project Report"
 author: "German Bautista, Eric Bayer, Quentin Wetzel"
 date: "12/07/2021"
-output: 
+output:
+  pdf_document:
+    toc: yes
   html_document:
-    toc: true
-    toc_float: true
+    toc: yes
+    toc_float: yes
 ---
 
 - Follow IMRaD structure: (Introduction, Methods, Results, Analysis, Discussion, Appendix)
@@ -13,21 +15,75 @@ output:
 -
 - Try different priors: an uninformative prior and another appropriate prior. Check how the posterior distributions differ (Brief sensitivity analysis)
 
-# Spotify Analysis
+\textbf{Goal}: We were interested in building a hierarchical Bayesian model (HBM) to model the distribution of annual stream rates of a genre given the total stream count of that genre.
 
-## Introduction
+We collected the total number of streams for the top 100 most streamed songs on Spotify. We grouped songs by genre and for each group we calculated a pooled average number of streams, a pooled (weighted) average number of years since release, and a pooled annual stream rate. When we made groups we decided to combine different subgenres such as "Chicago rap" and "dfw rap" into one genre. We had seven genres in total: "Dance", "Electronic", "Hip-Hop", "Pop", "R$\&$B", "Rap", and "Rock". Letting i represent the group label, we defined the following variables for $i = 1, 2, ..., 7$:
+
+$Y_i$: Pooled number of streams for songs of genre i (in millions)
+
+$N_i$: Pooled number of years from release for songs of genre i
+
+$\lambda_i$: Pooled annual stream rate for songs of genre i
+
+$\theta: \text{A hyperparameter which}\ \lambda_i\ \text{is conditioned on}.$
+
+Here the annual stream rate of a song is equal to $\frac{\text{Expected total number of streams}}{\text{Years since release of that song}}$. We used a rate because songs that are released earlier have a longer time to accumulate streams.
+
+We made the following assumptions:
+\begin{itemize}
+\item[--] $N_i$ is fixed for each genre i.
+\item[--] The pooled number of streams for songs of any genre was independent of the pooled number of streams for songs of a different genre. This means that we did not include the competitiveness between genres; say, accounting an increasing popularity of pop music in a time period due to a decreasing popularity of country music.
+\item[--] Streams occurred independently and could not occur simulatenously
+\item[--] The average annual stream rate of a genre was constant. 
+\end{itemize}
+
+The hierarchical Bayes model (HBM) has the following layers:
+
+Model: $Y_i | \lambda_i \sim ^{\text{ind}} \text{Poisson}(N_i \lambda_i)$.
+
+Prior: $\lambda_i | \theta \sim ^\text{iid} \text{Exponential} (\theta)$.
+
+Hyperprior: $\theta \sim \text{Gamma(a, b)}$.
+
+We used the Poisson distribution for our model because $Y_i$ represents a count and it met our assumptions. Ideally, we wanted a count model that included correlation between genres and allowed two people to listen to a song at the same time.
+
+We considered three hyperpriors:
+\begin{itemize}
+    \item By choosing $a \approx 0, b \approx 0$, we obtain a proper vague hyperprior. We chose $a = 0.01, b = 0.01$ . Note that JAGS is not compatible with imporper priors.
+    
+    \item To get more informative hyperpriors, we chose $a = 1, b = 1$ and $a = 10, b = 10$.
+    
+\end{itemize}
+
+Once we have an appropriate model, we will use Markov Chain Monte Carlo (MCMC) via Gibbs sampling to give us a posterior distribution $p(\lambda_i, \theta | Y_i)$. 
+Then we will calculate summary statistics and make conclusions about the dataset.
+
+\vspace{3mm} The data and code can be found on:\ \newline \indent \url{https://github.com/gbautista365/spotify-analysis}
+
+Questions: 
+- Can we choose arbitrary/guess a,b values for the informative hyperprior?
+
+- We were wondering on whether to use an annual stream rate or a daily stream rate ($\frac{\text{Total nummber of streams}}{\text{Days since release of song}}$)
+
+- Any suggestions are greatly appreciated.
+
+
+
+<!-- # Spotify Analysis -->
+
+<!-- ## Introduction -->
 
 
 
 
 
-## Methods
+<!-- ## Methods -->
 
 
 
 
 
-## Results
+<!-- ## Results -->
 
 
 
@@ -37,18 +93,18 @@ output:
 
 
 
-## Analysis
+<!-- ## Analysis -->
 
 
 
 
 
-## Discussion
+<!-- ## Discussion -->
 
 
 
 
-## Appendix
+<!-- ## Appendix -->
 
 
 
