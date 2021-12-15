@@ -3,12 +3,12 @@ data {
 }
 model {
   for(i in 1:len) {
-    lambda[i] <- theta
-    y[i] ~ dpois(lambda[i])
+    y[i] ~ dpois(lambda[i] * N[i])
+    lambda[i] ~ dexp(theta)
   }
   theta ~ dgamma(a,b)
-  a ~ dexp(.001)
-  b ~ dexp(.001)
+  a ~ dexp(5)
+  b ~ dexp(5)
 }
 
 
