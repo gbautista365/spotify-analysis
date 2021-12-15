@@ -1,0 +1,16 @@
+data {
+  len = length(Y)
+}
+model {
+  for(i in 1:len) {
+    lambda[i] <- theta
+    y[i] ~ dpois(lambda[i])
+  }
+  theta ~ dgamma(a,b)
+  a ~ dexp(.001)
+  b ~ dexp(.001)
+}
+
+
+
+
