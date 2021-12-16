@@ -1,17 +1,12 @@
 ---
 title: "STAT 431 Project Report"
 author: "German Bautista, Eric Bayer, Quentin Wetzel"
-date: "12/14/2021"
+date: "12/15/2021"
 output:
   html_document:
     toc: yes
     toc_float: yes
 ---
-
-- Follow IMRaD structure: (Introduction, Methods, Results, Analysis, Discussion, Appendix)
-- Clean and adjust data set
--
-- Try different priors: an uninformative prior and another appropriate prior. Check how the posterior distributions differ (Brief sensitivity analysis)
 
 \textbf{Goal}: We were interested in building a hierarchical Bayesian model (HBM) to model the distribution of annual stream rates of a genre given the total stream count of that genre.
 
@@ -35,7 +30,7 @@ We made the following assumptions:
 \item[--] The average annual stream rate of a genre was constant. 
 \end{itemize}
 
-The hierarchical Bayes model (HBM) has the following layers:
+The hierarchical Bayesian model (HBM) has the following layers:
 
 Model: $Y_i | \lambda_i \sim ^{\text{ind}} \text{Poisson}(N_i \lambda_i)$.
 
@@ -58,12 +53,6 @@ Then we will calculate summary statistics and make conclusions about the dataset
 
 \vspace{3mm} The data and code can be found on:\ \newline \indent \url{https://github.com/gbautista365/spotify-analysis}
 
-Questions: 
-- Can we choose arbitrary/guess a,b values for the informative hyperprior?
-
-- We were wondering on whether to use an annual stream rate or a daily stream rate ($\frac{\text{Total nummber of streams}}{\text{Days since release of song}}$)
-
-- Any suggestions are greatly appreciated.
 
 
 
