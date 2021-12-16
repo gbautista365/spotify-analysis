@@ -43,7 +43,7 @@ m <- jags.model("hierarchical4.bug", d, inits, n.chains=3)
 ### Make a preliminary run of 1000 iterations, with monitoring
 #NOTE: don't do too many iterations or it will take forever to plot the graphs/exit the code
 
-x <- coda.samples(m, c("theta", "lambda"), n.iter=100000)
+x <- coda.samples(m, c("theta", "lambda"), n.iter = 100000)
 
 z <- coda.samples(m, c("theta"), n.iter=100000)
 
@@ -68,5 +68,4 @@ summary(window(x, 1000))
 
 plot(window(x, 400), trace=FALSE, ask=TRUE)
 
-plot(window(x, 1000), trace=FALSE, ask=TRUE)
 
