@@ -12,69 +12,21 @@ output:
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-\textbf{Goal}: We were interested in building a hierarchical Bayesian model (HBM) to model the distribution of annual stream rates of a genre given the total stream count of that genre.
+# Spotify Analysis
 
-We collected the total number of streams for the top 100 most streamed songs on Spotify. We grouped songs by genre and for each group we calculated a pooled average number of streams, a pooled (weighted) average number of years since release, and a pooled annual stream rate. When we made groups we decided to combine different subgenres such as "Chicago rap" and "dfw rap" into one genre. We had seven genres in total: "Dance", "Electronic", "Hip-Hop", "Pop", "R$\&$B", "Rap", and "Rock". Letting i represent the group label, we defined the following variables for $i = 1, 2, ..., 7$:
-
-$Y_i$: Pooled number of streams for songs of genre i (in millions)
-
-$N_i$: Pooled number of years from release for songs of genre i
-
-$\lambda_i$: Pooled annual stream rate for songs of genre i
-
-$\theta: \text{A hyperparameter which}\ \lambda_i\ \text{is conditioned on}.$
-
-Here the annual stream rate of a song is equal to $\frac{\text{Expected total number of streams}}{\text{Years since release of that song}}$. We used a rate because songs that are released earlier have a longer time to accumulate streams.
-
-We made the following assumptions:
-\begin{itemize}
-\item[--] $N_i$ is fixed for each genre i.
-\item[--] The pooled number of streams for songs of any genre was independent of the pooled number of streams for songs of a different genre. This means that we did not include the competitiveness between genres; say, accounting an increasing popularity of pop music in a time period due to a decreasing popularity of country music.
-\item[--] Streams occurred independently and could not occur simulatenously
-\item[--] The average annual stream rate of a genre was constant. 
-\end{itemize}
-
-The hierarchical Bayesian model (HBM) has the following layers:
-
-Model: $Y_i | \lambda_i \sim ^{\text{ind}} \text{Poisson}(N_i \lambda_i)$.
-
-Prior: $\lambda_i | \theta \sim ^\text{iid} \text{Exponential} (\theta)$.
-
-Hyperprior: $\theta \sim \text{Gamma(a, b)}$.
-
-We used the Poisson distribution for our model because $Y_i$ represents a count and it met our assumptions. Ideally, we wanted a count model that included correlation between genres and allowed two people to listen to a song at the same time.
-
-We considered three hyperpriors:
-\begin{itemize}
-    \item By choosing $a \approx 0, b \approx 0$, we obtain a proper vague hyperprior. We chose $a = 0.01, b = 0.01$ . Note that JAGS is not compatible with imporper priors.
-    
-    \item To get more informative hyperpriors, we chose $a = 1, b = 1$ and $a = 10, b = 10$.
-    
-\end{itemize}
-
-Once we have an appropriate model, we will use Markov Chain Monte Carlo (MCMC) via Gibbs sampling to give us a posterior distribution $p(\lambda_i, \theta | Y_i)$. 
-Then we will calculate summary statistics and make conclusions about the dataset.
-
-\vspace{3mm} The data and code can be found on:\ \newline \indent \url{https://github.com/gbautista365/spotify-analysis}
-
-
-
-
-<!-- # Spotify Analysis -->
-
-<!-- ## Introduction -->
+## Introduction
 
 
 
 
 
-<!-- ## Methods -->
+## Methods
 
 
 
 
 
-<!-- ## Results -->
+## Results
 
 
 
@@ -84,7 +36,7 @@ Then we will calculate summary statistics and make conclusions about the dataset
 
 
 
-<!-- ## Analysis -->
+Analysis
 
 
 
@@ -105,12 +57,13 @@ library(rjags)
 data = read.table("ungrouped_spotify_data.txt")
 
 # Make the streams per day variable. 
-data$streams_day = data$stream/data$days
+data$streams_day = data$stream / data$days
 
-#This orders by genre so the newest bugs model makes sense
-data = data[order(data$top.genre),]
+# This orders alphabetically by genre 
+# This is vital for our bugs model to makes sense
+data = data[order(data$top.genre), ]
 
-#This resets the row numbers so again the newest bugs model works
+#This resets the row numbers so again the bugs model works
 rownames(data) = NULL
 
 #This is just here since to show why I put the values I did in the bugs model variable ind
@@ -164,6 +117,22 @@ summary(window(x, 400))
 plot(window(x, 400), trace=FALSE, ask=TRUE)
 ```
 
+```{r, eval = FALSE}
+# hierarchical4.bug file used for HBM
 
-
-
+data {
+  n.genres = 7
+  ind = c(1, 31, 36, 43, 68, 72, 90, 100)
+}
+model {
+  for (i in 1:n.genres) {
+    for (j in ind[i]:(ind[i + 1] - 1)) {
+      Y[j] ~ dpois(lambda[j])
+      lambda[j] ~ dexp(theta[i])
+    }
+    theta[i] ~ dgamma(a,b)
+  }
+  a ~ dexp(0.001)
+  b ~ dexp(0.001)
+}
+```
