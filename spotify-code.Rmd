@@ -8,6 +8,10 @@ output:
     toc_float: yes
 ---
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
 \textbf{Goal}: We were interested in building a hierarchical Bayesian model (HBM) to model the distribution of annual stream rates of a genre given the total stream count of that genre.
 
 We collected the total number of streams for the top 100 most streamed songs on Spotify. We grouped songs by genre and for each group we calculated a pooled average number of streams, a pooled (weighted) average number of years since release, and a pooled annual stream rate. When we made groups we decided to combine different subgenres such as "Chicago rap" and "dfw rap" into one genre. We had seven genres in total: "Dance", "Electronic", "Hip-Hop", "Pop", "R$\&$B", "Rap", and "Rock". Letting i represent the group label, we defined the following variables for $i = 1, 2, ..., 7$:
