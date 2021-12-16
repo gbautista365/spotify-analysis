@@ -17,9 +17,9 @@ data = data[order(data$top.genre),]
 d <- list(Y = data[ , 4], N = data[ , 3])
 
 #I set random priors for a and b. I think those are the only ones that need it. Feel free to change the numbers when testing
-inits <- list(list(a=1, b=1), 
-              list(a=100, b=100), 
-              list(a=100, b=100))
+inits <- list(list(a=.01, b=.01), 
+              list(a=.1, b=.1), 
+              list(a=1, b=1))
 
 #Run the jags model with latest bug file
 m = jags.model("hierarchical_simple.bug", data = d, inits = inits, n.chains = 3)
