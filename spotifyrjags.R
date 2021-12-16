@@ -34,8 +34,8 @@ d <- list(Y=data[,4])
 #I set random priors for a and b. I think those are the only ones that need it.
 # Feel free to change the numbers when testing
 inits <- list(list(a=.0001, b=.0001), 
-              list(a=1000, b=1000), 
-              list(a=.0001, b=1000))
+              list(a=1, b=1), 
+              list(a=10, b=10))
 
 #Run the jags model
 m <- jags.model("hierarchical4.bug", d, inits, n.chains=3)
@@ -43,12 +43,13 @@ m <- jags.model("hierarchical4.bug", d, inits, n.chains=3)
 ### Make a preliminary run of 1000 iterations, with monitoring
 #NOTE: don't do too many iterations or it will take forever to plot the graphs/exit the code
 
-x <- coda.samples(m, c("theta", "lambda"), n.iter=1000)
+x <- coda.samples(m, c("theta", "lambda"), n.iter=100000)
 
+z <- coda.samples(m, c("theta"), n.iter=100000)
 
 ### Assess convergence
 
-plot(x, smooth=FALSE, ask=TRUE)
+plot(z, smooth=FALSE, ask=TRUE)
 
 autocorr.plot(x[1], ask=TRUE)
 
@@ -60,10 +61,10 @@ gelman.plot(x, autoburnin=FALSE, ask=TRUE)
 ### Check stats after burn-in
 #For some reason this never has worked for me in any assignment
 
-summary(window(x, 400))
+summary(window(x, 1000))
 
 # Verify: Time-series SE less than 1/20 of SD
 #Window seems to not work properly
 
-plot(window(x, 400), trace=FALSE, ask=TRUE)
+plot(window(x, 1000), trace=FALSE, ask=TRUE)
 
