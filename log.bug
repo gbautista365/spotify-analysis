@@ -1,0 +1,17 @@
+data {
+  len = length(Y)
+  N = c(55062,  6730, 15248, 50091,  7266, 25927, 31468)
+}
+model {
+  for(i in 1:len) {
+    y[i] ~ dpois(lambda[i])
+    lambda[i] <- theta * N[i]
+  }
+  theta ~ dgamma(a,b)
+  a ~ dexp(5)
+  b ~ dexp(5)
+}
+
+
+
+
