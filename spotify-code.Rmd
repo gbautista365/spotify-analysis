@@ -10,17 +10,48 @@ output:
 
 # Spotify Analysis
 
+## Abstract
+
+With the advent of digital music platforms such as Spotify and Apple Music, accessibility to music has ever increased. We were interested in building a hierarchical Bayesian model (HBM) to model the distribution of daily expected stream rates for each song we collected and by genre. More specifically, we wanted to see if the genre of a song affected how often it was streamed. That is, were rap songs streamed more than others? To answer this question, we used the top 100 most streamed songs on Spotify.
+
 ## Introduction
 
-
-
-
+Based on our data, the most popular songs on Spotify come from 7 genres: "Dance", "Electronic", "Hip -Hop", "Pop", "R$\&$B", "Rap", and "Rock". Our goal of this analysis is to determine the distribution of the daily stream rate for the 100 most popular songs on Spotify as well as make some preliminary analyses into the type of genre and song that is most popular on the site. A hierarchical Bayesian model (HBM) built in JAGS is used with a unique $\lambda_{ij}$ value: which is the expected daily stream rate for song j of genre i. The $\lambda_{ij}$ value has a hyperprior $\theta_i$ based on its genre. Our next section Methods goes more in depth into our dataset and how we built the model. The Appendix section shows our code to perform the hierarchical Bayesian analysis in JAGS as well as the BUGS model. We also interpret various outputs from our model later in the Discussion section. The main contribution of this project is insight into the daily stream rates of the 100 most popular songs on Spotify.
 
 ## Methods
 
+Our dataset can be found on Kaggle: [Spotify Data](https://www.kaggle.com/pavan9065/top-100-most-streamed-songs-on-spotify)
+
+We collected the total number of streams for the top 100 most streamed songs on Spotify via [Top 100 Streamed](https://www.thefashionrequest.com/playlist-top-100-most-streamed-songsspotify/) and grouped the songs by genre . However, due to an error in the Kaggle dataset, one observation was deleted due to its low number of streams (lower than the next lowest by a factor of 1000) so our final dataset consisted of 99 total songs. The variable we grouped our songs by in our hierarchical model is genre so we decided to combine similar subgenres in the Kaggle dataset (e.g. combine "Chicago rap" and "dfw rap" into one genre, rap). We settled on seven genres in total: "Dance", "Electronic", "Hip -Hop", "Pop", "R$\&$B", "Rap", and "Rock". Letting i represent the genre label and j represent the song label, we defined the following variables for $i = 1, 2, ..., 7$, $j = 1, 2, ..., 99$:
+
+- $Y_{ij}$: Number of total streams for song j of genre i (in thousands)
+
+- $\lambda_{ij}$: Expected daily stream rate for song j of genre i
+
+- $\theta_i: \text{A hyperparameter for each genre which}\ \lambda_{ij}\ \text{is conditioned on}.$
+
+The daily stream rate of a song is equal to $\frac{\text{Expected total number of streams}}{\text{Days since release of that song}}$. We used a rate because songs that were released earlier had a longer time to accumulate streams.
+
+We made the following assumptions:
+
+- The number of streams for each song of any genre was independent of the number of streams for each song of a different genre. This means that we did not include the competitiveness between genres; say, accounting an increasing popularity of pop music in a time period due to a decreasing popularity of country music.
+-  Stream listens occurred independently and could not occur simultaneously
+- The average daily stream rate of a genre was constant. 
 
 
+The hierarchical Bayesian model (HBM) had the following layers:
 
+Model: $Y_{ij} | \lambda_{ij} \sim \text{Poisson}(\lambda_{ij})$.
+
+Prior: $\lambda_{ij} | \theta_i \sim ^\text{ind} \text{Exponential} (\theta_i)$.
+
+Hyperprior: $\theta_i \sim ^\text{iid} \text{Gamma(a, b)}$.
+
+We chose the Poisson distribution for our model because $Y_{ij}$ represented a count and it met our assumptions. Ideally, we wanted a count model that included correlation between songs and genres as well as allow for two people to listen to a song simultaneously.
+
+We considered three sets of arguments for the hyperprior. Each set was used as a starting point for the three chains in the Markov Chain Monte Carlo (MCMC) setup discussed below. By choosing $a \approx 0, b \approx 0$, we could obtain a proper vague hyperprior so we chose $a = 0.0001, b = 0.0001$ . Note that JAGS is not compatible with improper priors so we could not allow $a$ and $b$ to equal zero. To get more informative hyperpriors, we arbitrarily chose $a = 1, b = 1$ and $a = 10, b = 10$.
+    
+With our HBM we wanted to perform Markov Chain Monte Carlo (MCMC) in particular Gibbs sampling to give us the posterior distribution $p(\lambda_i, \theta | Y_i)$. To do this we used the `rjags` package in R which included the function `coda.samples` to iterate through each of the three chains. After doing so, we verified that the Gelman-Ruben plots and statistics of both $\lambda_ij$ and $\theta_i$ converged and were satisfactory for $i = 1, 2, \cdots 99$, $j = 1, 2 \cdots 7$. We lastly looked at the summary statistics of $\theta_j$ for $j = 1, 2, ...7$ and made conclusions about the dataset.
 
 ## Results
 
@@ -171,15 +202,12 @@ gelman.diag(x, autoburnin = FALSE)
 gelman.plot(x, autoburnin = FALSE, ask = TRUE)
 
 # Check statistics after burn-in
-summary(x)
-
 # Verify that Time-series SE less than 1/20 of SD
-plot(x, trace=FALSE, ask=TRUE)
+summary(x)
 ```
 
 ```{r, eval = FALSE}
 # hierarchical4.bug file used for HBM
-
 data {
   n.genres = 7
   ind = c(1, 31, 36, 43, 68, 72, 90, 100)
