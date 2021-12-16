@@ -12,7 +12,7 @@ output:
 
 ## Abstract
 
-With the advent of digital music platforms such as Spotify and Apple Music, accessibility to music has ever increased. We were interested in building a hierarchical Bayesian model (HBM) to model the distribution of daily expected stream rates for each song we collected and by genre. More specifically, we wanted to see if the genre of a song affected how often it was streamed. That is, were rap songs streamed more than others? To answer this question, we used the top 100 most streamed songs on Spotify.
+With the advent of digital music platforms such as Spotify and Apple Music, accessibility to music has ever increased. We were interested in building a hierarchical Bayesian model (HBM) to model the distribution of daily expected stream rates for each song we collected and by genre. With this we can see which songs were popular overall using a Bayesian framework. We used the top 100 most streamed songs on Spotify.
 
 ## Introduction
 
@@ -134,22 +134,29 @@ Summary statistics of $\theta_j$ for $j = 1, 2, ..., 7$:
 summary(z)
 ```
 
-
 ## Discussion
 
+With 100,000 iterations and 3 chains, each $\lambda_{ij}$ and $\theta_i$ converged according to their trace plots. The Gelman-Ruben statistic and the autocorrelation plots satisfied their criterias, the Gelman-Ruben statistic was near 1 for all $\lambda_{ij}$ and $\theta_i$ values, and the autocorrelation plot showed little to no autocorrelation. The time-series standard deviation is also well below 1/20 of the standard deviations for each statistic.
+With all the diagnostics showing the chains are satisfactory, we can make various posterior credible intervals on streams rates for different songs and other parameters. For example, $\lambda_{1,1}$ is the first song in our first genre and it is called "Closer" by the Chainsmokers and classified as "Dance" for its genre. 
+A 95 percent posterior credible interval for this song is [1088,1133] which means there is a 95 percent chance that the expected daily stream rate (in thousands) for the song "Closer" by the Chainsmokers is between 1088 and 1133.
 
+The analysis done here can show which songs within the top 100 list are more likely to be streamed than others and it can show statistics on the seven genres included in our model. However, our scope is limited to the 99 songs used in the dataset.
 
+With more time, we would like to create a model where we could pool songs within each genre and get better statistics on the overall genres. This would give us a better idea of which genres have the highest stream rate and useful posterior credible intervals. We could also analyze daily stream rates over time (most likely as days) as a time series to see how a song's daily stream rate changes over time. We can then apply Bayesian methods to the time series.
 
+Ideally, we would like a larger dataset to work with as well. Our conclusions only apply to the 99 songs that we looked at, and even though they had a very high amount of streams, it is still a small sample of all of the music streamed on Spotify.
 
-
-
-
-
+The dataset and our code can be found on Github: [spotify-snalysis](https://github.com/gbautista365/spotify-analysis)
 
 ## Contributions
 
+Honestly, we all contributed what we could and we were always in touch throughout the project. We gave it our best effort on this project. This is a very good team. Believe me.
 
+German Bautista (1/3): Brainstorming, Revised paper, Attended meetings, Code
 
+Eric Bayer (1/3): Brainstorming, Revised paper, Attended meetings, Code
+
+Quentin Wetzel (1/3): Brainstorming, Revised paper, Attended meetings, Code
 
 ## Appendix
 
