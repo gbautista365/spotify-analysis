@@ -66,4 +66,3 @@ summary(window(x, 400))
 #Window seems to not work properly
 
 plot(window(x, 400), trace=FALSE, ask=TRUE)
-
